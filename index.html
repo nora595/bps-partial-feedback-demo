@@ -484,7 +484,6 @@
     var info = '<span>咨询时间：<b>' + order.askTime + '</b></span>' +
       '<span>客户名称：<b>' + order.custName + '</b></span>' +
       '<span>商品数量：<b>10</b></span>' +
-      '<span>反馈进度：<b>[' + doneCount() + '/' + rows.length + ']</b></span>' +
       '<span>单状态：' + (st.key === 'partial' ? '<span class="tag tag-orange">部分反馈</span>' : (st.key === 'done' ? '<span class="tag tag-green">已反馈</span>' : '<span class="tag tag-gray">已审核</span>')) + '</span>';
     document.getElementById('detail-info').innerHTML = info;
 
