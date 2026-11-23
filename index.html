@@ -62,24 +62,27 @@
   .content { padding: 16px; }
   .card { background: #fff; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px; }
 
-  /* ===== 筛选栏（还原） ===== */
-  .filterbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 40px; }
+  /* ===== 筛选栏（还原：两行带标签） ===== */
+  .filterbar { display: flex; flex-direction: column; gap: 12px; }
+  .filterbar .frow { display: flex; align-items: center; gap: 16px; }
   .filterbar .fi { display: flex; align-items: center; }
+  .filterbar .fi > label { font-size: 14px; color: var(--text); margin-right: 8px; white-space: nowrap; }
   .filterbar input[type="text"] {
-    width: 280px; height: 40px; border: 1px solid var(--input-border); border-radius: 4px;
+    width: 260px; height: 40px; border: 1px solid var(--input-border); border-radius: 4px;
     padding: 0 12px; font-size: 14px; color: var(--text); outline: none;
   }
   .filterbar input[type="text"]::placeholder { color: #c0c4cc; }
   .filterbar input[type="text"]:focus { border-color: var(--btn-blue); }
   .filterbar select {
     height: 40px; border: 1px solid var(--input-border); border-radius: 4px; padding: 0 10px;
-    font-size: 14px; color: var(--text); background: #fff; outline: none; min-width: 150px;
+    font-size: 14px; color: var(--text); background: #fff; outline: none; width: 260px;
   }
-  .filterbar .combo select { min-width: 110px; border-radius: 4px 0 0 4px; border-right: none; }
-  .filterbar .combo input[type="text"] { width: 170px; border-radius: 0 4px 4px 0; }
+  .filterbar .combo select { width: 110px; border-radius: 4px 0 0 4px; border-right: none; }
+  .filterbar .combo input[type="text"] { width: 150px; border-radius: 0 4px 4px 0; }
   .filterbar .spacer { flex: 1; }
-  .filterbar .arrow { border: none; background: none; color: var(--sub); font-size: 16px; cursor: pointer; padding: 4px 6px; }
-  .filterbar .arrow.open { transform: rotate(90deg); }
+  .filterbar .ftoggle { border: none; background: none; color: var(--btn-blue); font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 2px; }
+  .filterbar .ftoggle .chev { display: inline-block; transition: transform .2s; font-size: 12px; }
+  .filterbar .ftoggle.open .chev { transform: rotate(180deg); }
   .filterbar .hidden-f { display: none; }
   .filterbar.expanded .hidden-f { display: flex; }
 
@@ -89,6 +92,7 @@
   }
   .btn:hover { color: var(--btn-blue); border-color: var(--btn-blue); }
   .btn-primary { background: var(--btn-blue); border-color: var(--btn-blue); color: #fff; }
+  .btn-outline-blue { border-color: var(--btn-blue); color: var(--btn-blue); background: #fff; }
   .btn-primary:hover { background: var(--btn-blue-hover); border-color: var(--btn-blue-hover); color: #fff; }
   .btn:disabled { opacity: .55; cursor: not-allowed; }
   .btn-primary:disabled:hover { background: var(--btn-blue); border-color: var(--btn-blue); color: #fff; }
@@ -239,26 +243,30 @@
         <!-- 咨询单列表（1:1 还原） -->
         <section class="card">
           <div class="filterbar" id="filterbar">
-            <span class="fi"><input type="text" id="f-no" placeholder="咨询单号"></span>
-            <span class="fi hidden-f"><select id="f-status">
-              <option value="all">全部</option>
-              <option value="pending">待反馈</option>
-              <option value="wait">已审核</option>
-              <option value="partial">部分反馈</option>
-              <option value="done">已反馈</option>
-            </select></span>
-            <span class="fi hidden-f"><select id="f-type">
-              <option value="all">全部</option>
-              <option>期货咨询单</option>
-              <option>专供咨询单</option>
-            </select></span>
-            <span class="fi combo hidden-f"><select id="f-custkey"><option>客户名称</option><option>客户编号</option></select><input type="text" id="f-cust" placeholder="请输入"></span>
-            <span class="fi hidden-f"><select id="f-sales"><option value="">业务员</option></select></span>
-            <span class="fi hidden-f"><select id="f-follow"><option value="">跟单员</option></select></span>
-            <span class="spacer"></span>
-            <button class="btn btn-primary" id="btn-reset">⟳ 重置</button>
-            <button class="btn btn-primary" id="btn-search">查询</button>
-            <button class="arrow" id="btn-expand" aria-label="展开更多搜索">›</button>
+            <div class="frow">
+              <span class="fi"><label>咨询单号</label><input type="text" id="f-no" placeholder="请输入"></span>
+              <span class="fi"><label>咨询单状态</label><select id="f-status">
+                <option value="all">请选择</option>
+                <option value="pending">待反馈</option>
+                <option value="wait">已审核</option>
+                <option value="partial">部分反馈</option>
+                <option value="done">已反馈</option>
+              </select></span>
+              <span class="fi combo"><label>客户组合</label><select id="f-custkey"><option>客户名称</option><option>客户编号</option></select><input type="text" id="f-cust" placeholder="请输入"></span>
+              <span class="spacer"></span>
+              <button class="btn btn-outline-blue" id="btn-reset">重 置</button>
+              <button class="btn btn-primary" id="btn-search">查 询</button>
+              <button class="ftoggle" id="btn-expand" aria-label="展开更多搜索"><span>搜索</span><span class="chev">▾</span></button>
+            </div>
+            <div class="frow hidden-f">
+              <span class="fi"><label>咨询类型</label><select id="f-type">
+                <option value="all">请选择</option>
+                <option>期货咨询单</option>
+                <option>专供咨询单</option>
+              </select></span>
+              <span class="fi"><label>业务员</label><select id="f-sales"><option value="">请选择</option></select></span>
+              <span class="fi"><label>跟单员</label><select id="f-follow"><option value="">请选择</option></select></span>
+            </div>
           </div>
 
           <div class="toolbar">
